@@ -106,6 +106,9 @@ const (
 	MPEG_PES_PACKET     = "mpeg_pes_packet"
 	MPEG_SPU            = "mpeg_spu"
 	MPEG_TS             = "mpeg_ts"
+	MPEG_TS_PACKET      = "mpeg_ts_packet"
+	MPEG_TS_PAT         = "mpeg_ts_pat"
+	MPEG_TS_PMT         = "mpeg_ts_pmt"
 	MSGPACK             = "msgpack"
 	OGG                 = "ogg"
 	OGG_PAGE            = "ogg_page"
@@ -326,4 +329,34 @@ type CSVLIn struct {
 
 type BitCoinBlockIn struct {
 	HasHeader bool `doc:"Has blkdat header"`
+}
+
+type MpegTsStream struct {
+	ProgramPid int
+	Type       int
+}
+
+type MpegTsProgram struct {
+	Number     int
+	Pid        int
+	StreamPids []int
+}
+
+type MpegTsPacketIn struct {
+	ProgramMap map[int]MpegTsProgram
+	StreamMap  map[int]MpegTsStream
+}
+
+type MpegTsPacketOut struct {
+	Pid              int
+	PayloadUnitStart bool
+	Payload          []byte
+}
+
+type MpegTsPatOut struct {
+	PidMap map[int]int // pid to program number that has pmt
+}
+
+type MpegTsPmtOut struct {
+	Streams map[int]MpegTsStream
 }
